@@ -1,5 +1,6 @@
 package br.com.gft.sistemavendas.model.builder;
 
+import br.com.gft.sistemavendas.model.StatusPedido;
 import br.com.gft.sistemavendas.model.Cliente;
 import br.com.gft.sistemavendas.model.Pedido;
 
