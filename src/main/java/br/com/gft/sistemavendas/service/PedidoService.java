@@ -1,32 +1,25 @@
 package br.com.gft.sistemavendas.service;
 
-import br.com.gft.sistemavendas.email.NotificadorEmail;
+import java.util.List;
+
 import br.com.gft.sistemavendas.model.Pedido;
-import br.com.gft.sistemavendas.repository.Pedidos;
-import br.com.gft.sistemavendas.sms.NotificadorSms;
 
 public class PedidoService {
-
+	private List<AcaoLancamentoPedido> acoes;
 	
-	private Pedidos pedidos; 
-	private NotificadorEmail notificadorEmail;
-	private NotificadorSms notificadorSms;
-	
-	public PedidoService(Pedidos pedidos, NotificadorEmail notificadorEmail, NotificadorSms notificadorSms) {
-		this.pedidos = pedidos;
-		this.notificadorEmail=notificadorEmail;
-		this.notificadorSms = notificadorSms;
+	public PedidoService(List<AcaoLancamentoPedido> acoes) {
+		this.acoes = acoes;
 	}
-
 
 	public double lancar(Pedido pedido) {
 		double imposto = pedido.getValor()*0.1;
-		pedidos.guardar(pedido);
-		notificadorEmail.enviar(pedido);
-		notificadorSms.enviar(pedido);
+		
+		acoes.forEach(a -> a.executar(pedido));
+//		for (AcaoLancamentoPedido acao:acoes) {
+//			acao.executar(pedido);
+//			
+//		}
+		
 		return imposto;
 	}
-	
-	
-
 }

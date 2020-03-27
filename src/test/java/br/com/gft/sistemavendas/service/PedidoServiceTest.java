@@ -1,6 +1,9 @@
 package br.com.gft.sistemavendas.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,10 +33,12 @@ public class PedidoServiceTest {
 	
 	private Pedido pedido;
 	
+	
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		pedidoService = new PedidoService(pedidos, notificadorEmail, notificadorSms);
+		List<AcaoLancamentoPedido> acoes = Arrays.asList(pedidos, notificadorEmail, notificadorSms);
+		pedidoService = new PedidoService(acoes);
 		pedido = new PedidoBuilder().comValor(100.0).para("Joao", "joao@joao.com", "1234-5678").construir();
 	}
 	
@@ -46,19 +51,19 @@ public class PedidoServiceTest {
 	@Test
 	public void deveSalvarPedidoNoBancoDeDados() throws Exception {
 		pedidoService.lancar(pedido);
-		Mockito.verify(pedidos).guardar(pedido);
+		Mockito.verify(pedidos).executar(pedido);
 		
 	}
 	
 	@Test
 	public void deveNotificarPorEmail() throws Exception {
 		pedidoService.lancar(pedido);
-		Mockito.verify(notificadorEmail).enviar(pedido);
+		Mockito.verify(notificadorEmail).executar(pedido);
 	}
 	
 	@Test
 	public void deveNotificarPorSms() throws Exception {
 		pedidoService.lancar(pedido);
-		Mockito.verify(notificadorSms).enviar(pedido);
+		Mockito.verify(notificadorSms).executar(pedido);
 	}
 }
